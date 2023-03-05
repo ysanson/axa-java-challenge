@@ -14,20 +14,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Rest controller for the /api/v1/employees route.
+ */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
     private static final Logger logger = LogManager.getLogger(EmployeeController.class);
 
     @Autowired
     private EmployeeService employeeService;
 
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
-    @GetMapping("/employees")
-    @ResponseBody
+    /**
+     * Gets all the employees.
+     * 
+     * @return The list of employees in the database.
+     */
+    @GetMapping("")
     public List<EmployeeDTO> getEmployees() {
         return employeeService
                 .retrieveEmployees()
@@ -36,8 +39,14 @@ public class EmployeeController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/employees/{employeeId}")
-    @ResponseBody
+    /**
+     * Gets an employee by its ID.
+     *
+     * @param employeeId The employee ID to search for.
+     * @return The employee if it exists, 404 otherwise.
+     * @throws ResponseStatusException if the employee is not found.
+     */
+    @GetMapping("/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable(name = "employeeId") Long employeeId) {
         Optional<Employee> employee = employeeService.getEmployee(employeeId);
         if (employee.isPresent()) {
@@ -47,9 +56,16 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping("/employees")
+    /**
+     * Creates a new employee in the database.
+     * The new employee must not have an ID, otherwise, a bad request code is sent
+     * back.
+     * 
+     * @param employee The employee to store
+     * @throws ResponseStatusException if the inserted employee has an ID.
+     */
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public void saveEmployee(@RequestBody EmployeeDTO employee) {
         if (employee.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A created user cannot have an ID");
@@ -58,19 +74,33 @@ public class EmployeeController {
         logger.info("Employee saved successfully");
     }
 
-    @DeleteMapping("/employees/{employeeId}")
+    /**
+     * Deletes an employee by its ID.
+     * 
+     * @param employeeId The employee ID to delete.
+     */
+    @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void deleteEmployee(@PathVariable(name = "employeeId") Long employeeId) {
         employeeService.deleteEmployee(employeeId);
         logger.info("Employee Deleted Successfully");
     }
 
-    @PutMapping("/employees/{employeeId}")
+    /**
+     * Updates an employee given it's ID and the request body.
+     * If the ID in the body is different from the ID in the URI, a bad request code
+     * is sent back.
+     *
+     * @param employee   The employee data to update.
+     * @param employeeId The employee ID to update.
+     */
+    @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
     public void updateEmployee(@RequestBody EmployeeDTO employee,
             @PathVariable(name = "employeeId") Long employeeId) {
+        if (employeeId != employee.getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID in the URI and in the body doesn't match");
+        }
         Optional<Employee> emp = employeeService.getEmployee(employeeId);
         if (emp.isPresent()) {
             employeeService.updateEmployee(employee.toEntity());

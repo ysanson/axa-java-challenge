@@ -18,29 +18,31 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public void setEmployeeRepository(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
-
+    @Override
     @Cacheable
     public List<Employee> retrieveEmployees() {
         return employeeRepository.findAll();
     }
 
+    @Override
     @Cacheable
     public Optional<Employee> getEmployee(Long employeeId) {
         return employeeRepository.findById(employeeId);
     }
 
+    @Override
     public void saveEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
 
+    @Override
     @CacheEvict
     public void deleteEmployee(Long employeeId) {
         employeeRepository.deleteById(employeeId);
     }
 
+    @Override
+    @CacheEvict
     public void updateEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
