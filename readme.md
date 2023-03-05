@@ -45,8 +45,13 @@ Application (with the embedded H2 database) is ready to be used ! You can access
 
 #### Your experience in Java
 
-Please let us know more about your Java experience in a few sentences. For example:
+I have some experience in Java, and I used Spring Boot for a Angular + Spring Boot project for a year, 2 years ago.
 
-- I have 3 years experience in Java and I started to use Spring Boot from last year
-- I'm a beginner and just recently learned Spring Boot
-- I know Spring Boot very well and have been using it for many years
+#### What I did
+
+- Added Log4j2 to replace default System.out.println
+- The EmployeeService#getEmployee returns an Optional<Employee>, checked by the EmployeeController to return 404 if not present.
+- I tried to add caching to the GetEmployee method, but I don't think I made it work.
+
+#### What I would have done
+- Fix a vulnerability issue in springfox-swagger-ui dependency.
