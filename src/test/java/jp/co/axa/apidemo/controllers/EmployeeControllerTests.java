@@ -25,13 +25,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(EmployeeController.class)
 @AutoConfigureMockMvc
-public class EmployeesControllerIntegrationTests {
+public class EmployeeControllerTests {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private EmployeeService employeeService;
 
+    /**
+     * Tests the /employees GET route.
+     * Checks that one employee is returned given one employee in the database.
+     *
+     */
     @Test
     public void givenEmployees_whenGetEmployees_thenReturnJsonArray() throws Exception {
 

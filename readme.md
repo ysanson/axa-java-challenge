@@ -51,7 +51,16 @@ I have some experience in Java, and I used Spring Boot for a Angular + Spring Bo
 
 - Added Log4j2 to replace default System.out.println
 - The EmployeeService#getEmployee returns an Optional<Employee>, checked by the EmployeeController to return 404 if not present.
+- I added one test in the EmployeesControllerTests.
+- Changed the @RestMapping to include /employees, for less redundancy
+- Added a DTO for the Employee entity. 
+- Added a missing @RequestBody on the POST employee method.
+- Added some Javadoc.
 - I tried to add caching to the GetEmployee method, but I don't think I made it work.
 
 #### What I would have done
+
 - Fix a vulnerability issue in springfox-swagger-ui dependency.
+- Added more tests, like integration tests
+- Added more Javadoc
+- Secure the endpoints using Spring Security
